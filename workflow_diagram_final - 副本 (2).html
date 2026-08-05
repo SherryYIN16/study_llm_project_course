@@ -1,0 +1,115 @@
+﻿<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>Hikari Agent 综合教程地图</title>
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+    <style>
+        body { font-family: 'Segoe UI', sans-serif; background: #f0f2f5; display: flex; flex-direction: column; align-items: center; padding: 20px; }
+        #nav-container { width: 90%; max-width: 1200px; display: flex; flex-direction: column; gap: 10px; margin-bottom: 20px; }
+        .row { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; }
+        .tab-btn { padding: 10px 20px; cursor: pointer; background: #ddd; border: none; border-radius: 8px; transition: 0.3s; font-weight: bold; }
+        .tab-btn.active { background: #6a5acd; color: white; }
+        #content { width: 90%; max-width: 1200px; display: flex; gap: 20px; align-items: flex-start; }
+        #left { flex: 2; background: white; padding: 20px; border-radius: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); min-height: 400px; display: flex; flex-direction: column; }
+        #right { flex: 1; display: flex; flex-direction: column; gap: 20px; }
+        .card { background: white; padding: 20px; border-radius: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); border-left: 5px solid #6a5acd; }
+        pre { background: #282c34; color: #abb2bf; padding: 15px; border-radius: 8px; font-size: 13px; overflow-x: auto; }
+        table { width: 100%; border-collapse: collapse; margin-top: 10px; }
+        th, td { padding: 12px; border: 1px solid #ddd; text-align: left; }
+        th { background: #f8f9fa; }
+        #right.hidden { display: none; }
+        #left.full-width { flex: 1; }
+    </style>
+</head>
+<body>
+    <h1>Hikari Agent 学习地图</h1>
+    <div id="nav-container">
+        <div class="row">
+            <button class="tab-btn active" onclick="showPage('overview', this)">项目概览、目录与核心技术栈</button>
+            <button class="tab-btn" onclick="showPage('arch', this)">系统架构图</button>
+            <button class="tab-btn" onclick="showPage('io', this)">输入输出规范</button>
+            <button class="tab-btn" onclick="showPage('design', this)">设计模式与类结构</button>
+        </div>
+        <div class="row">
+            <button class="tab-btn" onclick="showGraph('main', this)">主调度工作流</button>
+            <button class="tab-btn" onclick="showGraph('prose', this)">润色工作流</button>
+            <button class="tab-btn" onclick="showGraph('podcast', this)">播客工作流</button>
+            <button class="tab-btn" onclick="showGraph('mcp', this)">MCP 系统架构</button>
+        </div>
+    </div>
+    
+    <div id="content">
+        <div id="left"><div id="display-area"></div></div>
+        <div id="right">
+            <div class="card">
+                <h3 id="node-title">选择模块</h3>
+                <p id="node-desc" style="font-size: 14px; color: #666;">查看详细说明。</p>
+            </div>
+            <div class="card">
+                <h1>代码实现</h1>
+                <pre id="code-display">// 选择节点查看逻辑...</pre>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        mermaid.initialize({ startOnLoad: false });
+        
+        const data = {
+            overview: { 
+                content: '<h2>项目概览</h2><p>Hikari Agent 是一个基于 LangGraph 的智能化 Agent 系统，专用于多 Agent 协作与任务自动化处理。</p>' +
+                         '<h2>项目目录</h2><table><thead><tr><th>模块名称</th><th>功能描述</th><th>所在目录</th><th>核心代码</th></tr></thead><tbody>' +
+                         '<tr><td>Graph</td><td>业务逻辑与状态机</td><td><code>src/graph</code></td><td>builder.py, nodes.py</td></tr>' +
+                         '<tr><td>Agents</td><td>角色定义与行为策略</td><td><code>src/agents</code></td><td>manager.py</td></tr>' +
+                         '<tr><td>Tools</td><td>工具集 (搜索、爬虫、TTS)</td><td><code>src/tools</code></td><td>tavily_search.py</td></tr>' +
+                         '<tr><td>Server</td><td>MCP 协议接入服务</td><td><code>src/server</code></td><td>fastmcp.py</td></tr>' +
+                         '<tr><td>RAG</td><td>文档向量化与检索</td><td><code>src/rag</code></td><td>retriever.py</td></tr>' +
+                         '<tr><td>LLMs</td><td>LLM 配置与 API 调用</td><td><code>src/llms</code></td><td>manager.py</td></tr>' +
+                         '<tr><td>Crawler</td><td>爬虫相关逻辑</td><td><code>src/crawler</code></td><td>engine.py</td></tr>' +
+                         '<tr><td>Utils</td><td>通用辅助工具函数</td><td><code>src/utils</code></td><td>logger.py</td></tr></tbody></table>' +
+                         '<h2>核心技术栈</h2><ul style="line-height: 1.8;"><li><strong>LangGraph</strong>: <a href="https://langchain-ai.github.io/langgraph/" target="_blank">官方教程</a></li><li><strong>FastMCP</strong>: <a href="https://modelcontextprotocol.io/" target="_blank">官方教程</a></li><li><strong>Pydantic</strong>: <a href="https://docs.pydantic.dev/" target="_blank">官方教程</a></li><li><strong>Tavily</strong>: <a href="https://tavily.com/" target="_blank">官方教程</a></li></ul>'
+            },
+            arch: { content: '<h2>系统架构图</h2><div class="mermaid">graph TD\nUser((用户)) --> Agent[Hikari Agent]\nAgent --> LLM[LLM]\nAgent --> MCP[MCP]</div>' },
+            io: { content: '<h2>输入输出规范</h2><p><strong>输入</strong>: 自然语言任务。</p><p><strong>输出</strong>: 结构化报告、播客音频。</p>' },
+            design: { content: '<h2>设计模式</h2><ul><li><strong>状态模式</strong>: 节点状态切换</li><li><strong>策略模式</strong>: 动态角色选择</li><li><strong>单例模式</strong>: 配置管理</li></ul>' }
+        };
+        const graphs = {
+            main: { def: 'flowchart TD\nsupport(数据支持) --> coord(调度器)\ncoord --> planner(规划器)\nplanner --> team(研究团队)\nteam --> reporter(报告员)', nodes: {'support': {desc: '初始化', code: 'def support...'}, 'coord': {desc: '调度', code: 'def coord...'} } },
+            prose: { def: 'flowchart TD\nInput(文档) --> Polish(润色) --> Check(校对)', nodes: {'Input': {desc: '输入', code: 'def input...'} } },
+            podcast: { def: 'flowchart TD\nTopic(主题) --> Script(脚本) --> Audio(合成)', nodes: {'Topic': {desc: '主题', code: 'def topic...'} } },
+            mcp: { def: 'flowchart TD\nApp(Agent) --> Client(Client) --> Server(Server)', nodes: {'App': {desc: '入口', code: 'def app...'} } }
+        };
+        function setActive(btn) {
+            document.querySelectorAll(".tab-btn").forEach(b => b.classList.remove("active"));
+            btn.classList.add("active");
+        }
+        function showPage(id, btn) {
+            setActive(btn);
+            document.getElementById("display-area").innerHTML = data[id].content;
+            if (id === "overview") {
+                document.getElementById("right").classList.add("hidden");
+                document.getElementById("left").classList.add("full-width");
+            } else {
+                document.getElementById("right").classList.remove("hidden");
+                document.getElementById("left").classList.remove("full-width");
+            }
+        }
+        async function showGraph(type, btn) {
+            setActive(btn);
+            const container = document.getElementById("display-area");
+            container.innerHTML = '<div class="mermaid">' + graphs[type].def + '</div>';
+            await mermaid.run();
+        }
+        document.getElementById("display-area").addEventListener("click", (e) => {
+            const node = e.target.closest(".node");
+            if (node) {
+                const label = node.querySelector(".nodeLabel")?.textContent;
+                document.getElementById("node-title").innerText = label || "节点";
+                document.getElementById("node-desc").innerText = "详细信息...";
+            }
+        });
+        showPage("overview", document.querySelector(".tab-btn"));
+    </script>
+</body>
+</html>
