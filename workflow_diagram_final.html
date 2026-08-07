@@ -11,15 +11,16 @@
         .tab-btn { padding: 10px 20px; cursor: pointer; background: #ddd; border: none; border-radius: 8px; transition: 0.3s; font-weight: bold; }
         .tab-btn.active { background: #6a5acd; color: white; }
         #content { width: 90%; max-width: 1200px; display: flex; gap: 20px; align-items: flex-start; }
-        #left { flex: 2; background: white; padding: 20px; border-radius: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); min-height: 400px; display: flex; flex-direction: column; }
+        #left { flex: 2; background: white; padding: 20px; border-radius: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); min-height: 450px; display: flex; flex-direction: column; }
         #right { flex: 1; display: flex; flex-direction: column; gap: 20px; }
-        .card { background: white; padding: 20px; border-radius: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); border-left: 5px solid #6a5acd; }
+        .card { background: white; padding: 25px; border-radius: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); border-left: 5px solid #6a5acd; height: 100%; box-sizing: border-box; }
         pre { background: #282c34; color: #abb2bf; padding: 15px; border-radius: 8px; font-size: 13px; overflow-x: auto; }
         table { width: 100%; border-collapse: collapse; margin-top: 10px; }
         th, td { padding: 12px; border: 1px solid #ddd; text-align: left; }
         th { background: #f8f9fa; }
         #right.hidden { display: none; }
         #left.full-width { flex: 1; }
+        .mermaid { background: white !important; }
     </style>
 </head>
 <body>
@@ -41,20 +42,32 @@
     
     <div id="content">
         <div id="left"><div id="display-area"></div></div>
-        <div id="right">
+                        <div id="right">
             <div class="card">
-                <h3 id="node-title">选择模块</h3>
-                <p id="node-desc" style="font-size: 14px; color: #666;">查看详细说明。</p>
+                <h1 style="font-size: 24px; margin-top: 0;">项目架构分析</h1>
+                <div style="font-size: 16px; line-height: 1.8; color: #333;">
+                    <p>Hikari Agent 采用模块化设计，以实现高效的多 Agent 协作。</p>
+                    <ul style="padding-left: 20px;">
+                        <li><strong>Core Graph (src/graph)</strong>: 业务逻辑核心，负责 orchestrate 整个任务流。</li>
+                        <li><strong>Agents (src/agents)</strong>: 定义 Agent 的动态决策能力。</li>
+                        <li><strong>Tools (src/tools & src/crawler)</strong>: 提供数据接入与处理能力。</li>
+                        <li><strong>LLM Service (src/llms)</strong>: 统一大模型交互入口。</li>
+                        <li><strong>MCP Server (src/server)</strong>: 标准化接口服务。</li>
+                    </ul>
+                </div>
             </div>
-            <div class="card">
-                <h1>代码实现</h1>
-                <pre id="code-display">// 选择节点查看逻辑...</pre>
-            </div>
+        </div>
         </div>
     </div>
 
     <script>
-        mermaid.initialize({ startOnLoad: false });
+        mermaid.initialize({ 
+            startOnLoad: true, 
+            theme: 'base',
+            themeVariables: {
+                subgraphBackground: '#e6e6fa'
+            }
+        });
         
         const data = {
             overview: { 
@@ -70,7 +83,7 @@
                          '<tr><td>Utils</td><td>通用辅助工具函数</td><td><code>src/utils</code></td><td>logger.py</td></tr></tbody></table>' +
                          '<h2>核心技术栈</h2><ul style="line-height: 1.8;"><li><strong>LangGraph</strong>: <a href="https://langchain-ai.github.io/langgraph/" target="_blank">官方教程</a></li><li><strong>FastMCP</strong>: <a href="https://modelcontextprotocol.io/" target="_blank">官方教程</a></li><li><strong>Pydantic</strong>: <a href="https://docs.pydantic.dev/" target="_blank">官方教程</a></li><li><strong>Tavily</strong>: <a href="https://tavily.com/" target="_blank">官方教程</a></li></ul>'
             },
-            arch: { content: '<h2>系统架构图</h2><div class="mermaid">graph TD\nUser((用户)) --> Agent[Hikari Agent]\nAgent --> LLM[LLM]\nAgent --> MCP[MCP]</div>' },
+            arch: { content: '<h2>系统架构图</h2><pre class="mermaid">graph TD\n    subgraph Core[Core Graph System]\n        builder[src/graph/builder.py]\n        nodes[src/graph/nodes.py]\n        types[src/graph/types.py]\n    end\n    subgraph Agents[Agent Modules]\n        agent_manager[src/agents/agents.py]\n    end\n    subgraph Tools[Crawler & Tools]\n        crawler[src/crawler/crawler.py]\n        tools[src/tools]\n    end\n    subgraph LLM[LLM Management]\n        llm[src/llms/llm.py]\n    end\n    subgraph Server[MCP Server]\n        mcp[src/server/fastmcp.py]\n    end\n    Core --> Agents\n    Core --> LLM\n    Agents --> Tools\n    Agents --> Core\n    mcp --> Core</pre>' },
             io: { content: '<h2>输入输出规范</h2><p><strong>输入</strong>: 自然语言任务。</p><p><strong>输出</strong>: 结构化报告、播客音频。</p>' },
             design: { content: '<h2>设计模式</h2><ul><li><strong>状态模式</strong>: 节点状态切换</li><li><strong>策略模式</strong>: 动态角色选择</li><li><strong>单例模式</strong>: 配置管理</li></ul>' }
         };
@@ -94,11 +107,12 @@
                 document.getElementById("right").classList.remove("hidden");
                 document.getElementById("left").classList.remove("full-width");
             }
+            mermaid.run();
         }
         async function showGraph(type, btn) {
             setActive(btn);
             const container = document.getElementById("display-area");
-            container.innerHTML = '<div class="mermaid">' + graphs[type].def + '</div>';
+            container.innerHTML = '<pre class="mermaid">' + graphs[type].def + '</pre>';
             await mermaid.run();
         }
         document.getElementById("display-area").addEventListener("click", (e) => {
@@ -107,9 +121,24 @@
                 const label = node.querySelector(".nodeLabel")?.textContent;
                 document.getElementById("node-title").innerText = label || "节点";
                 document.getElementById("node-desc").innerText = "详细信息...";
+                
+                const activeBtn = document.querySelector(".tab-btn.active");
+                if (activeBtn) {
+                    const match = activeBtn.getAttribute("onclick").match(/'([^']+)'/);
+                    if (match) {
+                        const type = match[1];
+                        if (graphs[type] && graphs[type].nodes[label]) {
+                            document.getElementById("code-display").innerText = graphs[type].nodes[label].code;
+                        } else {
+                            document.getElementById("code-display").innerText = "// 暂无代码信息";
+                        }
+                    }
+                }
             }
         });
         showPage("overview", document.querySelector(".tab-btn"));
     </script>
 </body>
 </html>
+
+

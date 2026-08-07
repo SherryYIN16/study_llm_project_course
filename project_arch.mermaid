@@ -1,0 +1,29 @@
+﻿graph TD
+    subgraph Core[Core Graph System]
+        builder[src/graph/builder.py]
+        nodes[src/graph/nodes.py]
+        types[src/graph/types.py]
+    end
+    
+    subgraph Agents[Agent Modules]
+        agent_manager[src/agents/agents.py]
+    end
+
+    subgraph Tools[Crawler & Tools]
+        crawler[src/crawler/crawler.py]
+        tools[src/tools]
+    end
+
+    subgraph LLM[LLM Management]
+        llm[src/llms/llm.py]
+    end
+
+    subgraph Server[MCP Server]
+        mcp[src/server/fastmcp.py]
+    end
+
+    Core --> Agents
+    Core --> LLM
+    Agents --> Tools
+    Agents --> Core
+    mcp --> Core
