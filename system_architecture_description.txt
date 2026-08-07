@@ -1,0 +1,27 @@
+﻿Hikari Agent 系统架构解析：
+
+本系统采用分层架构设计，确保了各模块的职责单一且交互清晰。
+
+1. MCP Server 层 (src/server/fastmcp.py):
+   作为系统的外部入口，负责与 MCP 协议的兼容与通信，是系统与外部环境进行交互的枢纽。
+
+2. Core Graph System 层 (src/graph/):
+   系统的中枢大脑。
+   - builder.py: 负责构建状态流转图 (Graph Builder)。
+   - nodes.py: 定义了各功能节点的具体执行逻辑。
+   - types.py: 定义了系统运行的状态空间与数据结构。
+
+3. Agent Modules 层 (src/agents/agents.py):
+   负责 Agent 的生命周期管理与决策逻辑，是系统的执行单元。
+
+4. LLM Management 层 (src/llms/llm.py):
+   集中管理大语言模型的配置与 API 调用，实现了 LLM 策略的统一封装。
+
+5. Crawler & Tools 层 (src/crawler/ & src/tools/):
+   工具扩展层，包含爬虫模块与其他功能性工具，供 Agent 调用以增强外部获取信息的能力。
+
+数据流向说明：
+- MCP Server 发起请求至 Core Graph System。
+- Core Graph System 作为核心负责驱动 Agent Modules 与 LLM Management 协同工作。
+- Agent Modules 负责具体的执行与交互，并调用 Crawler & Tools 处理数据。
+- Agent Modules 亦会反向更新 Core Graph System 的执行状态。

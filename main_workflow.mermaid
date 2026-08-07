@@ -1,0 +1,15 @@
+﻿graph TD
+    start(START) --> support(support_data)
+    support --> coord(coordinator)
+    coord --> planner(planner)
+    planner --> team(research_team)
+    team --> researcher(researcher)
+    team --> coder(coder)
+    researcher --> team
+    coder --> team
+    planner --> reporter(reporter)
+    reporter --> END(END)
+    planner --> background(background_investigation)
+    background --> planner
+    coder --> human(human_feedback)
+    human --> planner
