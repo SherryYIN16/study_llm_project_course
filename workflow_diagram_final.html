@@ -1,8 +1,9 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
     <title>Hikari Agent 综合教程地图</title>
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
     <style>
         body { font-family: 'Segoe UI', sans-serif; background: #f0f2f5; display: flex; flex-direction: column; align-items: center; padding: 20px; }
@@ -42,32 +43,23 @@
     
     <div id="content">
         <div id="left"><div id="display-area"></div></div>
-                        <div id="right">
+        <div id="right">
             <div class="card">
-                <h1 style="font-size: 24px; margin-top: 0;">项目架构分析</h1>
-                <div style="font-size: 16px; line-height: 1.8; color: #333;">
-                    <p>Hikari Agent 采用模块化设计，以实现高效的多 Agent 协作。</p>
-                    <ul style="padding-left: 20px;">
-                        <li><strong>Core Graph (src/graph)</strong>: 业务逻辑核心，负责 orchestrate 整个任务流。</li>
-                        <li><strong>Agents (src/agents)</strong>: 定义 Agent 的动态决策能力。</li>
-                        <li><strong>Tools (src/tools & src/crawler)</strong>: 提供数据接入与处理能力。</li>
-                        <li><strong>LLM Service (src/llms)</strong>: 统一大模型交互入口。</li>
-                        <li><strong>MCP Server (src/server)</strong>: 标准化接口服务。</li>
-                    </ul>
-                </div>
+                <h1 style='font-size: 20px; margin-top: 0;'>模式应用统计</h1>
+                <ul style='padding-left: 20px; font-size: 14px;'>
+                    <li><strong>策略模式</strong>: 1 次记录</li>
+                    <li><strong>状态模式</strong>: 1 次记录</li>
+                    <li><strong>工厂模式</strong>: 1 次记录</li>
+                    <li><strong>数据对象模式</strong>: 1 次记录</li>
+                    <li><strong>装饰器模式</strong>: 1 次记录</li>
+                </ul>
+                <p style='font-size: 13px; color: #666;'>这些模式是构建 Hikari Agent 的基石。</p>
             </div>
-        </div>
         </div>
     </div>
 
     <script>
-        mermaid.initialize({ 
-            startOnLoad: true, 
-            theme: 'base',
-            themeVariables: {
-                subgraphBackground: '#e6e6fa'
-            }
-        });
+        mermaid.initialize({ startOnLoad: true, theme: 'base', themeVariables: { subgraphBackground: '#e6e6fa' } });
         
         const data = {
             overview: { 
@@ -75,70 +67,36 @@
                          '<h2>项目目录</h2><table><thead><tr><th>模块名称</th><th>功能描述</th><th>所在目录</th><th>核心代码</th></tr></thead><tbody>' +
                          '<tr><td>Graph</td><td>业务逻辑与状态机</td><td><code>src/graph</code></td><td>builder.py, nodes.py</td></tr>' +
                          '<tr><td>Agents</td><td>角色定义与行为策略</td><td><code>src/agents</code></td><td>manager.py</td></tr>' +
-                         '<tr><td>Tools</td><td>工具集 (搜索、爬虫、TTS)</td><td><code>src/tools</code></td><td>tavily_search.py</td></tr>' +
+                         '<tr><td>Tools</td><td>工具集</td><td><code>src/tools</code></td><td>tavily_search.py</td></tr>' +
                          '<tr><td>Server</td><td>MCP 协议接入服务</td><td><code>src/server</code></td><td>fastmcp.py</td></tr>' +
                          '<tr><td>RAG</td><td>文档向量化与检索</td><td><code>src/rag</code></td><td>retriever.py</td></tr>' +
-                         '<tr><td>LLMs</td><td>LLM 配置与 API 调用</td><td><code>src/llms</code></td><td>manager.py</td></tr>' +
-                         '<tr><td>Crawler</td><td>爬虫相关逻辑</td><td><code>src/crawler</code></td><td>engine.py</td></tr>' +
-                         '<tr><td>Utils</td><td>通用辅助工具函数</td><td><code>src/utils</code></td><td>logger.py</td></tr></tbody></table>' +
-                         '<h2>核心技术栈</h2><ul style="line-height: 1.8;"><li><strong>LangGraph</strong>: <a href="https://langchain-ai.github.io/langgraph/" target="_blank">官方教程</a></li><li><strong>FastMCP</strong>: <a href="https://modelcontextprotocol.io/" target="_blank">官方教程</a></li><li><strong>Pydantic</strong>: <a href="https://docs.pydantic.dev/" target="_blank">官方教程</a></li><li><strong>Tavily</strong>: <a href="https://tavily.com/" target="_blank">官方教程</a></li></ul>'
+                         '<tr><td>LLMs</td><td>LLM 配置与 API 调用</td><td><code>src/llms</code></td><td>manager.py</td></tr></tbody></table>' +
+                         '<h2>核心技术栈</h2><ul><li><strong>LangGraph</strong>: <a href="https://langchain-ai.github.io/langgraph/" target="_blank">官方教程</a></li><li><strong>FastMCP</strong>: <a href="https://modelcontextprotocol.io/" target="_blank">官方教程</a></li></ul>'
             },
-            arch: { content: '<h2>系统架构图</h2><pre class="mermaid">graph TD\n    subgraph Core[Core Graph System]\n        builder[src/graph/builder.py]\n        nodes[src/graph/nodes.py]\n        types[src/graph/types.py]\n    end\n    subgraph Agents[Agent Modules]\n        agent_manager[src/agents/agents.py]\n    end\n    subgraph Tools[Crawler & Tools]\n        crawler[src/crawler/crawler.py]\n        tools[src/tools]\n    end\n    subgraph LLM[LLM Management]\n        llm[src/llms/llm.py]\n    end\n    subgraph Server[MCP Server]\n        mcp[src/server/fastmcp.py]\n    end\n    Core --> Agents\n    Core --> LLM\n    Agents --> Tools\n    Agents --> Core\n    mcp --> Core</pre>' },
-            io: { content: '<h2>输入输出规范</h2><p><strong>输入</strong>: 自然语言任务。</p><p><strong>输出</strong>: 结构化报告、播客音频。</p>' },
-            design: { content: '<h2>设计模式</h2><ul><li><strong>状态模式</strong>: 节点状态切换</li><li><strong>策略模式</strong>: 动态角色选择</li><li><strong>单例模式</strong>: 配置管理</li></ul>' }
+            arch: { content: '<h2>系统架构图</h2><pre class="mermaid">graph TD\n Core --> Agents\n Core --> LLM\n Agents --> Tools\n mcp --> Core</pre>' },
+            io: { content: '<h2>输入输出规范</h2><p><strong>输入</strong>: 自然语言任务。</p><p><strong>输出</strong>: 结构化报告。</p>' },
+            design: { content: "<div style='font-family: Segoe UI, sans-serif; font-size: 15px; color: #333; line-height: 1.6;'><h1 style='color: #6a5acd;'>设计模式与类结构知识库：Hikari Agent 项目解读</h1><p>作为您的计算机老师，今天我们来剖析一下 Hikari Agent 项目中应用的一些经典编程智慧。理解这些模式，能让您的代码不仅“能跑”，而且“优雅且易于维护”。</p><h3 style='color: #6a5acd;'>1. 工厂模式 (Factory Pattern)</h3><p><strong>文件路径</strong>: <code>src/agents/agents.py</code><br><strong>函数名称</strong>: <code>create_agent</code><br><strong>实现细节</strong>: 此函数根据传入的角色类型，初始化并配置相应的 Agent 实例。确保了对象创建的一致性。</p><p><em>老师点评</em>：有了这个“工厂”，您只需要传入参数，它就能吐出一个配置好的、健壮的 Agent 对象。</p><h3 style='color: #6a5acd;'>2. 数据对象模式 (Data Classes / Pydantic)</h3><p><strong>文件路径</strong>: <code>src/config/configuration.py</code>, <code>src/graph/types.py</code><br><strong>类名称</strong>: <code>Configuration</code>, <code>State</code><br><strong>实现细节</strong>: 使用 Pydantic 定义任务处理的状态空间和配置参数，确保数据的类型安全与结构完整性。</p><p><em>老师点评</em>：使用这些数据类，您不仅拥有了自动校验数据的能力，还拥有了“类型提示”的神器。</p><h3 style='color: #6a5acd;'>3. 状态模式 (State Pattern)</h3><p><strong>文件路径</strong>: <code>src/graph/types.py</code>, <code>src/graph/nodes.py</code><br><strong>实现细节</strong>: <code>State</code> 类作为全局状态存储任务上下文，Node 函数根据状态流转。</p><p><em>老师点评</em>：这使得复杂的任务流程不再是混乱的 if-else，而是条理分明的状态流转。</p><h3 style='color: #6a5acd;'>4. 策略模式 (Strategy Pattern)</h3><p><strong>文件路径</strong>: <code>src/llms/llm.py</code>, <code>src/graph/nodes.py</code><br><strong>函数名称</strong>: <code>get_llm_by_type</code>, <code>planner_node</code><br><strong>实现细节</strong>: 动态切换 LLM 模型或选择不同的 prompt 模板分支。</p><p><em>老师点评</em>：这是解耦业务逻辑与具体实现的利器，新增分析类型只需新增策略分支。</p><h3 style='color: #6a5acd;'>5. 装饰器模式 (Decorator Pattern)</h3><p><strong>文件路径</strong>: <code>src/server/app.py</code>, <code>src/graph/nodes.py</code>, <code>src/tools/decorators.py</code><br><strong>装饰器名称</strong>: <code>@app.post</code>, <code>@tool</code>, <code>@log_io</code><br><strong>实现细节</strong>: 处理路由、工具封装、日志埋点。</p><p><em>老师点评</em>：这让您的主逻辑代码非常纯粹，将辅助逻辑交给装饰器处理。</p></div>" }
         };
         const graphs = {
-            main: { def: 'flowchart TD\nsupport(数据支持) --> coord(调度器)\ncoord --> planner(规划器)\nplanner --> team(研究团队)\nteam --> reporter(报告员)', nodes: {'support': {desc: '初始化', code: 'def support...'}, 'coord': {desc: '调度', code: 'def coord...'} } },
-            prose: { def: 'flowchart TD\nInput(文档) --> Polish(润色) --> Check(校对)', nodes: {'Input': {desc: '输入', code: 'def input...'} } },
-            podcast: { def: 'flowchart TD\nTopic(主题) --> Script(脚本) --> Audio(合成)', nodes: {'Topic': {desc: '主题', code: 'def topic...'} } },
-            mcp: { def: 'flowchart TD\nApp(Agent) --> Client(Client) --> Server(Server)', nodes: {'App': {desc: '入口', code: 'def app...'} } }
+            main: { def: 'flowchart TD\nsupport --> coord --> planner --> team --> reporter', nodes: {} },
+            prose: { def: 'flowchart TD\nInput --> Polish --> Check', nodes: {} },
+            podcast: { def: 'flowchart TD\nTopic --> Script --> Audio', nodes: {} },
+            mcp: { def: 'flowchart TD\nApp --> Client --> Server', nodes: {} }
         };
-        function setActive(btn) {
-            document.querySelectorAll(".tab-btn").forEach(b => b.classList.remove("active"));
-            btn.classList.add("active");
-        }
+        function setActive(btn) { document.querySelectorAll(".tab-btn").forEach(b => b.classList.remove("active")); btn.classList.add("active"); }
         function showPage(id, btn) {
             setActive(btn);
             document.getElementById("display-area").innerHTML = data[id].content;
-            if (id === "overview") {
-                document.getElementById("right").classList.add("hidden");
-                document.getElementById("left").classList.add("full-width");
-            } else {
-                document.getElementById("right").classList.remove("hidden");
-                document.getElementById("left").classList.remove("full-width");
-            }
+            if (id === 'overview') { document.getElementById("right").classList.add("hidden"); document.getElementById("left").classList.add("full-width"); }
+            else { document.getElementById("right").classList.remove("hidden"); document.getElementById("left").classList.remove("full-width"); }
             mermaid.run();
         }
         async function showGraph(type, btn) {
             setActive(btn);
-            const container = document.getElementById("display-area");
-            container.innerHTML = '<pre class="mermaid">' + graphs[type].def + '</pre>';
+            document.getElementById("display-area").innerHTML = '<pre class="mermaid">' + graphs[type].def + '</pre>';
             await mermaid.run();
         }
-        document.getElementById("display-area").addEventListener("click", (e) => {
-            const node = e.target.closest(".node");
-            if (node) {
-                const label = node.querySelector(".nodeLabel")?.textContent;
-                document.getElementById("node-title").innerText = label || "节点";
-                document.getElementById("node-desc").innerText = "详细信息...";
-                
-                const activeBtn = document.querySelector(".tab-btn.active");
-                if (activeBtn) {
-                    const match = activeBtn.getAttribute("onclick").match(/'([^']+)'/);
-                    if (match) {
-                        const type = match[1];
-                        if (graphs[type] && graphs[type].nodes[label]) {
-                            document.getElementById("code-display").innerText = graphs[type].nodes[label].code;
-                        } else {
-                            document.getElementById("code-display").innerText = "// 暂无代码信息";
-                        }
-                    }
-                }
-            }
-        });
         showPage("overview", document.querySelector(".tab-btn"));
     </script>
 </body>
 </html>
-
-
