@@ -1,0 +1,56 @@
+﻿节点分析报告
+
+1. START (内置节点)
+   - 文件名: N/A
+   - 函数名: N/A
+   - 描述: 工作流的起始节点，触发系统流程。
+
+2. support_data (support_data_node)
+   - 文件名: src/graph/nodes.py
+   - 函数名: support_data_node
+   - 描述: 初始化阶段，通过 MCP 工具加载所需的支撑数据、分析结果等，准备后续工作所需的上下文。
+
+3. coordinator (coordinator_node)
+   - 文件名: src/graph/nodes.py
+   - 函数名: coordinator_node
+   - 描述: 作为人机交互的协调者，负责与用户对话，解析任务需求，并根据需求判断是否需要跳转至计划生成阶段。
+
+4. planner (planner_node)
+   - 文件名: src/graph/nodes.py
+   - 函数名: planner_node
+   - 描述: 核心规划器，负责根据研究主题生成完整的处理计划（Step Plan），包含任务的分解与执行顺序。
+
+5. research_team (research_team_node)
+   - 文件名: src/graph/nodes.py
+   - 函数名: research_team_node
+   - 描述: 负责任务分发的协调节点，负责决定下一步由哪个具体执行节点（researcher 或 coder）来处理任务。
+
+6. researcher (researcher_node)
+   - 文件名: src/graph/nodes.py
+   - 函数名: researcher_node
+   - 描述: 执行具体的调研任务，调用 Web Search 或 Crawl 工具，检索外部信息。
+
+7. coder (coder_node)
+   - 文件名: src/graph/nodes.py
+   - 函数名: coder_node
+   - 描述: 执行代码分析或 Python 代码运行任务，利用 Python REPL 工具处理复杂数据处理需求。
+
+8. reporter (reporter_node)
+   - 文件名: src/graph/nodes.py
+   - 函数名: reporter_node
+   - 描述: 根据收集到的所有研究结果与中间观察，整理撰写最终的结构化研究报告。
+
+9. END (内置节点)
+   - 文件名: N/A
+   - 函数名: N/A
+   - 描述: 工作流的终止节点，表示任务完成。
+
+10. background_investigation (background_investigation_node)
+    - 文件名: src/graph/nodes.py
+    - 函数名: background_investigation_node
+    - 描述: 在规划前进行背景调查，使用 Web Search 获取初始信息，辅助 Planner 制定更准确的计划。
+
+11. human_feedback (human_feedback_node)
+    - 文件名: src/graph/nodes.py
+    - 函数名: human_feedback_node
+    - 描述: 中间环节，向用户反馈已生成的计划，等待用户审查、确认或要求调整，确保流程符合预期。
