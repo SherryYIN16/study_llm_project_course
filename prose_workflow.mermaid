@@ -1,0 +1,13 @@
+﻿graph TD
+    START -->|condition: option| prose_continue(prose_continue)
+    START -->|condition: option| prose_improve(prose_improve)
+    START -->|condition: option| prose_shorter(prose_shorter)
+    START -->|condition: option| prose_longer(prose_longer)
+    START -->|condition: option| prose_fix(prose_fix)
+    START -->|condition: option| prose_zap(prose_zap)
+    prose_continue --> END
+    prose_improve --> END
+    prose_shorter --> END
+    prose_longer --> END
+    prose_fix --> END
+    prose_zap --> END

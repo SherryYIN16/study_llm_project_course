@@ -1,0 +1,11 @@
+﻿节点：script_writer
+文件：src/podcast/graph/script_writer_node.py
+描述：接收输入内容，根据主题生成播客对话脚本。
+
+节点：tts
+文件：src/podcast/graph/tts_node.py
+描述：将生成的文本脚本转化为语音音频文件。
+
+节点：audio_mixer
+文件：src/podcast/graph/audio_mixer_node.py
+描述：将生成的语音片段进行混音处理，输出最终播客音频。

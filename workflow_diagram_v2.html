@@ -119,11 +119,59 @@
                 });
             }, 500);
         }
+		<!-- ONLY_ADD_PROSE_TAB_HERE_20260811_UNIQUE -->
+		async function setupProseInteraction() {
+            const nodeMap = {
+                'prose_continue': { info: 'src/prose/graph/prose_continue_node.py', desc: '处理“继续”选项，根据当前内容生成后续文本扩展。' },
+                'prose_improve': { info: 'src/prose/graph/prose_improve_node.py', desc: '处理“优化”选项，提升文本的逻辑性、可读性或语言润色。' },
+                'prose_shorter': { info: 'src/prose/graph/prose_shorter_node.py', desc: '处理“缩短”选项，精简文本内容，去除冗余，保留核心观点。' },
+                'prose_longer': { info: 'src/prose/graph/prose_longer_node.py', desc: '处理“延长”选项，对文本进行详细阐述或补充更多细节。' },
+                'prose_fix': { info: 'src/prose/graph/prose_fix_node.py', desc: '处理“修复”选项，纠正文本中的语法、拼写或逻辑错误。' },
+                'prose_zap': { info: 'src/prose/graph/prose_zap_node.py', desc: '处理“擦除/重写”选项，根据用户意图对文本进行彻底重构。' }
+            };
 
+            setTimeout(() => {
+                document.querySelectorAll('.mermaid .node').forEach(node => {
+                    node.style.cursor = 'pointer';
+                    node.onclick = function() {
+                        const nodeId = this.id.split('-')[1];
+                        const data = nodeMap[nodeId];
+                        if (data) {
+                            document.getElementById('node-desc').innerText = data.info;
+                            document.getElementById('code-display').innerText = data.desc;
+                        }
+                    };
+                });
+            }, 500);
+        }
+		
+		<!-- ONLY_ADD_PODCAST_TAB_HERE_20260811_UNIQUE -->
+		async function setupPodcastInteraction() {
+            const nodeMap = {
+                'script_writer': { info: 'src/podcast/graph/script_writer_node.py', desc: '接收输入内容，根据主题生成播客对话脚本。' },
+                'tts': { info: 'src/podcast/graph/tts_node.py', desc: '将生成的文本脚本转化为语音音频文件。' },
+                'audio_mixer': { info: 'src/podcast/graph/audio_mixer_node.py', desc: '将生成的语音片段进行混音处理，输出最终播客音频。' }
+            };
+
+            setTimeout(() => {
+                document.querySelectorAll('.mermaid .node').forEach(node => {
+                    node.style.cursor = 'pointer';
+                    node.onclick = function() {
+                        const nodeId = this.id.split('-')[1];
+                        const data = nodeMap[nodeId];
+                        if (data) {
+                            document.getElementById('node-desc').innerText = data.info;
+                            document.getElementById('code-display').innerText = data.desc;
+                        }
+                    };
+                });
+            }, 500);
+        }
+		
         const graphs = {
             main: { def: 'graph TD\nstart(START) --> support(support_data)\nsupport --> coord(coordinator)\ncoord --> planner(planner)\nplanner --> team(research_team)\nteam --> researcher(researcher)\nteam --> coder(coder)\nresearcher --> team\ncoder --> team\nplanner --> reporter(reporter)\nreporter --> END(END)\nplanner --> background(background_investigation)\nbackground --> planner\ncoder --> human(human_feedback)\nhuman --> planner' },
-            prose: { def: 'flowchart TD\nInput --> Polish --> Check', nodes: {} },
-            podcast: { def: 'flowchart TD\nTopic --> Script --> Audio', nodes: {} },
+            prose: { def: 'graph TD\nSTART -->|option| prose_continue(prose_continue)\nSTART -->|option| prose_improve(prose_improve)\nSTART -->|option| prose_shorter(prose_shorter)\nSTART -->|option| prose_longer(prose_longer)\nSTART -->|option| prose_fix(prose_fix)\nSTART -->|option| prose_zap(prose_zap)\nprose_continue --> END\nprose_improve --> END\nprose_shorter --> END\nprose_longer --> END\nprose_fix --> END\nprose_zap --> END' },
+            podcast: { def: 'graph TD\n    START --> script_writer(script_writer)\n    script_writer --> tts(tts)\n    tts --> audio_mixer(audio_mixer)\n    audio_mixer --> END' },
             mcp: { def: 'flowchart TD\nApp --> Client --> Server', nodes: {} }
         };
         function setActive(btn) { document.querySelectorAll(".tab-btn").forEach(b => b.classList.remove("active")); btn.classList.add("active"); }
@@ -171,6 +219,36 @@
             document.getElementById("left").classList.remove("full-width");
             setupNodeInteraction();
         }
+		if (type === 'prose') {
+                document.getElementById("right").innerHTML = `
+                    <div class='card' style="margin-bottom: 20px;">
+                        <h1 id='node-title' style='font-size: 18px;'>节点标识</h1>
+                        <p id='node-desc' style='font-size: 14px; color: #666;'>点击左侧节点查看详情。</p>
+                    </div>
+                    <div class='card'>
+                        <h1 style='font-size: 18px;'>节点行为</h1>
+                        <p id='code-display' style='font-size: 14px;'>点击左侧节点查看详情。</p>
+                    </div>
+                `;
+                document.getElementById("right").classList.remove("hidden");
+                document.getElementById("left").classList.remove("full-width");
+                setupProseInteraction();
+            }
+		 if (type === 'podcast') {
+                document.getElementById("right").innerHTML = `
+                    <div class='card' style="margin-bottom: 20px;">
+                        <h1 id='node-title' style='font-size: 18px;'>节点标识</h1>
+                        <p id='node-desc' style='font-size: 14px; color: #666;'>点击左侧节点查看详情。</p>
+                    </div>
+                    <div class='card'>
+                        <h1 style='font-size: 18px;'>节点行为</h1>
+                        <p id='code-display' style='font-size: 14px;'>点击左侧节点查看详情。</p>
+                    </div>
+                `;
+                document.getElementById("right").classList.remove("hidden");
+                document.getElementById("left").classList.remove("full-width");
+                setupPodcastInteraction();
+            } 
    }
         showPage("overview", document.querySelector(".tab-btn"));
     </script>
