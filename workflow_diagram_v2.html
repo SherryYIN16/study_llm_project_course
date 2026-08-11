@@ -146,6 +146,7 @@
         }
 		
 		<!-- ONLY_ADD_PODCAST_TAB_HERE_20260811_UNIQUE -->
+		
 		async function setupPodcastInteraction() {
             const nodeMap = {
                 'script_writer': { info: 'src/podcast/graph/script_writer_node.py', desc: '接收输入内容，根据主题生成播客对话脚本。' },
@@ -202,7 +203,10 @@
       setActive(btn);
         document.getElementById("right").classList.add("hidden");
         document.getElementById("left").classList.add("full-width");
-        document.getElementById("display-area").innerHTML = '<pre class="mermaid">' + graphs[type].def + '</pre>';
+		document.getElementById("display-area").innerHTML = `
+            <div style="display: flex; justify-content: center; align-items: center; width: 100%; min-height: 500px;">
+                <pre class="mermaid">${graphs[type].def}</pre>
+            </div>`;
         await mermaid.run();
         if (type === 'main') {
             document.getElementById("right").innerHTML = `
