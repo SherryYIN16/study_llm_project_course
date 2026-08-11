@@ -81,30 +81,43 @@
         <!-- ONLY_ADD_MAIN_SCHEDULE_TAB_HERE_20260811_UNIQUE -->
         async function setupNodeInteraction() {
             const nodeMap = {
-                'support_data': { info: 'src/graph/nodes.py / support_data_node', desc: '初始化阶段，通过 MCP 工具加载所需的支撑数据。' },
-                'coordinator': { info: 'src/graph/nodes.py / coordinator_node', desc: '人机交互协调者，解析任务需求。' },
+                'support': { info: 'src/graph/nodes.py / support_data_node', desc: '初始化阶段，通过 MCP 工具加载所需的支撑数据。' },
+                'coord': { info: 'src/graph/nodes.py / coordinator_node', desc: '人机交互协调者，解析任务需求。' },
                 'planner': { info: 'src/graph/nodes.py / planner_node', desc: '核心规划器，生成处理计划。' },
-                'research_team': { info: 'src/graph/nodes.py / research_team_node', desc: '任务分发与协调。' },
+                'team': { info: 'src/graph/nodes.py / research_team_node', desc: '任务分发与协调。' },
                 'researcher': { info: 'src/graph/nodes.py / researcher_node', desc: '执行调研任务，调用搜索工具。' },
                 'coder': { info: 'src/graph/nodes.py / coder_node', desc: '执行代码分析与 Python 处理。' },
                 'reporter': { info: 'src/graph/nodes.py / reporter_node', desc: '整理撰写最终研究报告。' },
-                'background_investigation': { info: 'src/graph/nodes.py / background_investigation_node', desc: '规划前背景调查。' },
-                'human_feedback': { info: 'src/graph/nodes.py / human_feedback_node', desc: '反馈计划供用户审查。' }
+                'background': { info: 'src/graph/nodes.py / background_investigation_node', desc: '规划前背景调查。' },
+                'human': { info: 'src/graph/nodes.py / human_feedback_node', desc: '反馈计划供用户审查。' }
             };
-            document.querySelectorAll('.mermaid .node').forEach(node => {
-                node.style.cursor = 'pointer';
-                node.onclick = function() {
-                    const id = this.id.replace('flowchart-', '').replace('graph-', '');
-                    if (nodeMap[id]) {
-                        document.getElementById('right').classList.remove('hidden');
-                        document.getElementById('left').classList.remove('full-width');
-                        document.getElementById('right').innerHTML = `
-                            <div class="card" style="margin-bottom: 20px;"><h3>节点标识</h3><p>${nodeMap[id].info}</p></div>
-                            <div class="card"><h3>节点行为</h3><p>${nodeMap[id].desc}</p></div>
-                        `;
-                    }
-                };
-            });
+
+            // 等待 Mermaid 渲染完成
+            setTimeout(() => {
+                document.querySelectorAll('.mermaid .node').forEach(node => {
+                    node.style.cursor = 'pointer';
+                    node.onclick = function() {
+                        // 提取 Mermaid ID，例如 "flowchart-support-123" -> "support"
+                        const nodeId = this.id.split('-')[1]; 
+                        const data = nodeMap[nodeId];
+                        
+                        if (data) {
+                            document.getElementById('right').classList.remove('hidden');
+                            document.getElementById('left').classList.remove('full-width');
+                            document.getElementById('right').innerHTML = `
+                                <div class="card" style="margin-bottom: 20px;">
+                                    <h1 style="font-size: 18px;">节点标识</h1>
+                                    <p style="font-size: 14px; color: #666;">${data.info}</p>
+                                </div>
+                                <div class="card">
+                                    <h1 style="font-size: 18px;">节点行为</h1>
+                                    <p style="font-size: 14px;">${data.desc}</p>
+                                </div>
+                            `;
+                        }
+                    };
+                });
+            }, 500);
         }
 
         const graphs = {
