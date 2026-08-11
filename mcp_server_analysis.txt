@@ -1,0 +1,30 @@
+﻿### 项目模块解析：mcp_server.py
+
+D:\tianchi2025\hikari_agent\mcp_server.py 是一个基于 FastMCP 框架构建的 MCP (Model Context Protocol) 服务器，专门用于为 AI Agent 提供金融数据获取与分析能力。它不仅是 Agent 的“瑞士军刀”，更是连接 AI 大脑与外部金融数据的核心中间件。
+
+---
+
+#### 1. 核心定位：AI 的金融数据大脑
+该模块通过标准化协议将原子化的业务逻辑暴露给 Agent，负责完成：数据抓取 -> 本地持久化 -> LLM 智能分析 -> 生成 Markdown 报告的全自动流水线。
+
+#### 2. 装饰器机制：@mcp.tool 的魔法
+在该服务中，@mcp.tool 装饰器是实现能力扩展的核心：
+*   **理解装饰器**：可以将其想象为给函数贴上了“外部世界可用的 API 标签”。它将原本隐藏在 Python 脚本中的函数，“广播”给 AI Agent，使其变成 Agent 可随时呼叫的专业工具。
+*   **实现模式**：通过装饰器，我们以“外观模式”封装了底层的 API 调用和复杂的 Prompt 模板，使得 AI 无需关心数据怎么获取，只需关注如何使用结果。
+
+#### 3. 核心功能组件 (Tools)
+通过 @mcp.tool 定义的四种工具，赋予了 Agent 深度处理金融数据的能力：
+*   **fetch_a_stock_data**: 接收 A 股代码，获取财务数据并保存至 tmp/data.json。
+*   **fetch_hk_stock_data**: 接收港股代码，处理并存储至 tmp/data.json。
+*   **data_analysis**: 读取财务数据，结合 ANALYSIS_PROMPT，调用 DeepSeek 模型进行专业分析，并输出分析报告。
+*   **corp_valuation**: 调用 AkShare 获取估值数据，结合用户逻辑 idea 与 VALUATION_PROMPT，生成投资建议报告。
+
+#### 4. 技术集成与基础设施
+*   **AI 能力集成**: 使用 openai SDK 对接 DeepSeek API，通过预定义模板 (template.py) 将枯燥财务数据转化为结构化投资报告。
+*   **运维保障**: 
+    *   **日志记录**: 利用 loguru 实现 10MB 分片、30 天保留的日志记录。
+    *   **配置管理**: 通过 python-dotenv 实现 API 密钥的安全注入。
+    *   **服务形态**: 采用 SSE (Server-Sent Events) 协议启动服务 (端口 8005)，实现了 Agent 环境与工具服务的解耦。
+
+---
+总结：这是一个典型的“工具增强型”后端服务，它通过装饰器模式实现了逻辑与接口的快速对接，是整个 Hikari Agent 金融分析任务链中的数据核心。
